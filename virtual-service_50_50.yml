@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  creationTimestamp: null
+  name: usuario
+spec:
+  hosts:
+  - usuario
+  http:
+  - route:
+    - destination:
+        host: usuario
+        subset: version-v1
+      weight: 50
+    - destination:
+        host: usuario
+        subset: version-v2
+      weight: 50

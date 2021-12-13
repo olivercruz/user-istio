@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: usuario
+  labels:
+    account: details
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usuario-v1
+  labels:
+    app: usuario
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: usuario
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: usuario
+        version: v1
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      serviceAccountName: usuario
+      containers:
+        - name: usuario
+          image: usuario-micro:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8990
+              name: http
+              #protocol: TCP
